@@ -53,7 +53,7 @@ if($_POST['submit'] == 'Advance') {
 		// Save active player stats
 		$query = "UPDATE $table_u SET 
 				lifetime_kills = lifetime_kills + kills,
-				games_completed = games_completed + 1,
+				games_completed = games_completed + 1
 				WHERE active = 1;";
 		mysql_query($query) or die("SQL Error (line " . __LINE__ . "): " . mysql_error() . '---' . $query);
 		// Reset all users to fresh
@@ -226,7 +226,9 @@ BUGS:<br>
 PLAYERS HOME:<br>
 -Stats on home page (top taggers, player counts)<br>
 PLAYERS LIST:<br>
+*-Stack values next to profile picture to better utilize space<br>
 -Add color coding (admin controllable?) to each group, mostly on Player List page<br>
+-Make view selections stateful<br>
 -Add lifetime kills/stats to players list?<br>
 PLAYER ACCOUNT:<br>
 -Add Starvation/Survival counter (javascript?)<br>
@@ -255,12 +257,12 @@ OTHER FEATURES:<br>
 -Admin controllable messages: OZ reason, zombie report, new missions<br>
 -Take advantage of partially implemented "Factions"<br>
 -Create admin controlled overlay image for factions (small? transparent? side banner?)<br>
--Create profile (overlay?) image for starved users<br>
+-Create profile (RIP, overlay?) image for starved users<br>
 -Update style HTML for modern browsers (see <a href="http://www.osundead.com/index.php">OSU HvZ</a>)<br>
 -Add human stats (time alive, maybe zombie stuns, survivor place/humans left when tagged)<br>
 -Replace mail() with notify() function that supports alternate user-controlled methods (SMS, Facebook, etc.)<br>
 -Make game creation process easier (created through admin system): "No Game at this domain. Create one? [enter_reg_admin_code]"<br>
--Save Game Actions: game_actions table: action_id, game_id, user_id, recipient_id, action_type (enum? tagged, starved, joined), timestamp<br>
+-Save Game Actions: game_actions table: action_id, game_id, user_id, recipient_id, action_type (enum? tagged, starved, joined, shared), timestamp<br>
 -Support multiple active games consecutively<br>
 -Use game activity table for FB-like "Friendship" view/history<br>
 -Make site mobile friendly<br>
