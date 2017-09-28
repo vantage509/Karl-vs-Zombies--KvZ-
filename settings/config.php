@@ -7,9 +7,9 @@ $config = array(
     "game_name" => $game_name,
 
 # mySQL Settings 
-    "mysql_user" => "DBUser ",
-    "mysql_pass" => "DBPassword",
-    "mysql_db" => "DBname",
+    "mysql_user" => "hvz",
+    "mysql_pass" => "HvZ",
+    "mysql_db" => "hvz",
     "mysql_db_host" => "localhost",
 
 # Table names 
@@ -18,6 +18,7 @@ $config = array(
     "var_table" => "{$game_name}_variables",
     "time_table" => "{$game_name}_timezone",
     "content_table" => "{$game_name}_content",
+
 # Web page location settings 
     "login_goto" => "hub.php",
     "logout_goto" => "index.php",
@@ -29,7 +30,7 @@ $config = array(
 # your game is appropriately large or small. However, 
 # and this is just my personal opinion, if you change it 
 # DURING registration, someone should beat you bloody.  
-    "reg_admin" => "ChangemePlease",
+    "reg_admin" => "chi11iewing5",
     "id_length" => "6",
 
 # Pagination records

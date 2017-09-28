@@ -86,6 +86,21 @@ if($_POST['submit'] == 'Advance') {
 			mysql_query("UPDATE $table_u SET killed_by = (SELECT oz FROM (SELECT id AS oz FROM $table_u WHERE state = -2) sub_query) WHERE killed_by = 'OriginalZombie';");
 			mysql_query("DELETE FROM $table_u WHERE state = -3;");
 			$message = "The original zombie has been revealed!";
+
+            $query = "SELECT CONCAT(fname, ' ', lname) AS oz_name FROM {$table_u} WHERE state = -2;";
+            $ret = mysql_query($query) or die("SQL Error (line " . __LINE__ . "): " . mysql_error() . '---' . $query);
+            $oz_name = mysql_result($ret, 0);
+            //email active players
+            $ret = mysql_query("SELECT email FROM {$table_u} WHERE active AND state >=0;") or die(mysql_error());
+            $body  = "BREAKING NEWS: We've just received official word from the authorities that patient 
+                    zero has been identified as a local resident that went by the name '{$oz_name}'. Keep a 
+                    watchful eye out for this person or anyone they've been close to.\n\n";
+            $body .= "Be prepared at all times! Remember, zombie's are stealthy, stay on your toes.\n\n";
+            $body .= "--HvZSource";
+            while($row = mysql_fetch_row($ret)) {
+                //echo $row[0] . ": " . $body . "<br><br>\n\n";
+                mail($row[0], "HvZSource: Patient Zero Discovered!", $body, $header);
+            }
 		}
 	}	
 	include("../twitter.php");
@@ -123,7 +138,7 @@ if($reg_open == 1) {
 } else {
 	$fini = '';
 }
-print "<input type='checkbox' name='step' value='reg-open'$fini>";
+print "<input type='checkbox' name='step' value='reg-open'{$fini}>";
 ?><br>&nbsp;
 </td>
 <td><b>Open Registration</b><p>
@@ -140,7 +155,7 @@ if($reg_open) {
 	} else {
 		$fini = '';
 	}
-	print "<input type='checkbox' name='step' value='reg-closed'$fini>";
+	print "<input type='checkbox' name='step' value='reg-closed'{$fini}>";
 }
 ?><br>&nbsp;
 </td>
@@ -158,7 +173,7 @@ if($reg_closed || $game_started) {
 	} else {
 		$fini = '';
 	}
-	print "<input type='checkbox' name='step' value='oz-selected'$fini>";
+	print "<input type='checkbox' name='step' value='oz-selected'{$fini}>";
 }
 ?><br>&nbsp;
 </td>          
@@ -176,7 +191,7 @@ if($oz_selected) {
 	} else {
 		$fini = '';
 	}
-	print "<input type='checkbox' name='step' value='game-started'$fini>";
+	print "<input type='checkbox' name='step' value='game-started'{$fini}>";
 }
 ?><br>&nbsp;
 </td>          
@@ -194,7 +209,7 @@ if($game_started) {
 	} else {
 		$fini = '';
 	}
-	print "<input type='checkbox' name='step' value='oz-revealed'$fini>";
+	print "<input type='checkbox' name='step' value='oz-revealed'{$fini}>";
 }
 ?><br>&nbsp;
 </td>          
@@ -233,7 +248,8 @@ PLAYERS LIST:<br>
 PLAYER ACCOUNT:<br>
 -Add Starvation/Survival counter (javascript?)<br>
 -Show if player isn't registered for current game on account page<br>
--Stats: Total kills, Average Kills/Game, Survivor place, Time alive<br>
+-Zombie Stats: Total kills, Average Kills/Game<br>
+-Human Stats: Zombies outlived, Survivor place/percentile, Time alive<br>
 PLAYER TAG REPORT:<br>
 -Replace id with user_id in html<br>
 -Distributed Sharing option (ex: tagger chooses to split 48 hours: either keep 48 for yourself or share 2@24, 3@16, 4@12, etc.)<br>

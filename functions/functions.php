@@ -12,10 +12,19 @@ function load_config($config_file_name) {
 	return $config;
 }
 
-function game_summary() {
+function game_summary($_game_id = null) {
 
     global $table_u, $table_v;
 
+    if(is_numeric($_game_id)) {
+        $query = "SELECT CONCAT('<h3>', title, '</h3>', summary) game_summary FROM games WHERE game_id = {$_game_id} LIMIT 1;";
+        $result = mysql_query($query) or die(mysql_error());
+        if(mysql_num_rows($result) > 0) {
+            $row = mysql_fetch_assoc($result);
+            return $row["game_summary"];
+        }
+    }
+    
     $ret = mysql_query("SELECT value FROM $table_v WHERE keyword='game-started';"); 
     $game_started = mysql_result($ret, 0);
     $ret = mysql_query("SELECT value FROM $table_v WHERE keyword='reg-open';"); 

@@ -107,75 +107,50 @@ print "</select>";
 <input type='checkbox' name='show_feed' value='1' <?php if($show_feed) print "checked"; ?>> Last Fed
 <input type='checkbox' name='show_starved' value='1' <?php if($show_starved) print "checked"; ?>> Time Starved
 </center>
-<table width="100%" border="1">
+<table width="80%" border="0">
 <tr>
 <?php
-if($show_pics) print "<td>Picture</td>";
+if($show_pics) print "<th>Picture</th>";
 ?>
-<td>Name</td>
-<td>Affiliation</td>
-<?php
-if($show_kills) print "<td>Tags</td>";
-if($show_killed) print "<td>Time of Tag</td>";
-if($show_feed) print "<td>Last Feeding Time</td>";
-if($show_starved) print "<td>Time of Starvation</td>";
-?>
+<th>Stats</th>
 </tr>
 
 <?php
-$ret = mysql_query("SELECT fname, lname, state, killed_by, killed, feed, kills, starved, 
+$ret = mysql_query("SELECT fname, lname, state, killed_by, UNIX_TIMESTAMP(killed), UNIX_TIMESTAMP(feed), kills, UNIX_TIMESTAMP(starved), 
         if(state IN (0, -1," . ($reveal_oz?" -2,":"") . " -3), pic_path_z, pic_path) pic_path, 
         id FROM $table_u WHERE $faction AND active ORDER BY $sort_by $order;"); 
 for($i = 0; $i < mysql_num_rows($ret); $i++) {
 	
-	print "<tr>";
+	print "<tr><td>";
 	$row = mysql_fetch_array($ret);
     $no_photo = $row[2]>0?"images/hum_no_photo.jpg":"images/zom_no_photo.jpg";
 	if($row[2] == -2 && !$reveal_oz) {
-		$status_row = "<td>Human</td>";
+		$status_row = "Human<br>";
         $no_photo = "images/hum_no_photo.jpg";
 	} else {
-		$status_row = "<td>{$state_translate[$row[2]]}</td>";
+		$status_row = "{$state_translate[$row[2]]}<br>";
 	}
 	if($show_pics) {
 		$pic_path = strlen($row["pic_path"]) > 0 ? $row["pic_path"] : $no_photo;
 		$img_size = getimagesize($pic_path);
 		//echo '<!-- '; var_dump($img_size); echo ' -->';
 		$img_size = $img_size[1] < 200 ? $img_size[1] : '200';
-		print "<td><center><img src='$pic_path' height='$img_size'></center></td>";
+		print "<center><img src='{$pic_path}' height='{$img_size}'></center></td><td>";
 	}
-	print "<td>$row[0] {$row[1]}</td>\n{$status_row}";
-	if($show_kills) {
-		print "<td>";
-		if($row[2] == -2 && !$reveal_oz) {
-			print "0";
-		} else {
-			print "$row[6]";
-		}
-		print "<br>&nbsp;</td>";
+	print "<b>{$row[0]} {$row[1]}</b><br>\n{$status_row}";
+	if($show_kills && ($row[6] > 0 || $row[2] <= 0)) {
+		print "Tags: {$row[6]}<br>";
 	}
-	if($show_killed) {
-		print "<td>";
-		if($row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) {
-			print $row[4];
-		}
-		print "<br>&nbsp;</td>";
+	if($show_killed && $row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) {
+        print "Tagged: " . date('M jS @ g:ia', $row[4]) . "<br>";
 	}
-	if($show_feed) {
-		print "<td>";
-		if($row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) { 
-                        print $row[5];
-                }
-		print "<br>&nbsp;</td>";
+	if($show_feed && $row[2] <= 0 && ($row[2] != -2 || $reveal_oz)) { 
+		print "Last Fed:  " . date('M jS @ g:ia', $row[5]) . "<br>";
 	}
-	if($show_starved) {
-		print "<td>";
-		if($row[2] == 0) { 
-                        print $row[7];
-                }
-		print "<br>&nbsp;</td>";
+	if($show_starved && $row[2] == 0) {
+		print "Starved:  " . date('M jS @ g:ia', $row[7]) . "<br>";
 	}
-	print "</tr>";
+	print "</td></tr>";
 
 }
 ?>

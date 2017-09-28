@@ -32,6 +32,7 @@ $game_summary = game_summary();
 <?php print $front; ?>
 
 <h2>Game Summary</h2><p><?= $game_summary; ?></p>
+<p><a href="game_history.php">View Past Games</a></p>
 <br>
 <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like href="http://www.facebook.com/pages/Humans-Vs-Zombies/103123970670?ref=ts" width="300" font="verdana"></fb:like>
 <div style="padding-right:15px;">

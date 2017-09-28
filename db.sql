@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `games` (
   `game_id` int(10) NOT NULL auto_increment,
   `title` varchar(250) NOT NULL default 'New HvZ Game',
   `start_datetime` datetime NOT NULL,
-  `end_datetime` datetime NOT NULL,
   `summary` text NOT NULL,
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`game_id`)
